@@ -49,7 +49,7 @@ def main():
     from rich.panel import Panel
     console = Console()
     
-    console.print(Panel("[bold cyan]Welcome to the Grand Azure Hotel Booking System[/]", expand=False))
+    console.print(Panel("[bold cyan]Welcome to the WAKA Hotel Booking System[/]", expand=False))
     
     # 2. Ask user what they want to run
     console.print()
@@ -80,7 +80,7 @@ def main():
         from models.hotel import Hotel
         from cli import HotelCLI
 
-        hotel = Hotel("Grand Azure Hotel")
+        hotel = Hotel("WAKA Hotel")
         app = HotelCLI(hotel)
         
         try:

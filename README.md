@@ -1,4 +1,4 @@
-# Grand Azure Hotel — Room Booking System
+# WAKA Hotel — Room Booking System
  Final Assessment
  
 ## How to Run

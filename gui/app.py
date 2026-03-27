@@ -1,38 +1,31 @@
-"""
-gui/app.py
-Hotel Room Booking System - SEGi University Final Assessment
-GUI built with tkinter (cross-platform: Windows, macOS, Linux)
-
-No external libraries needed - tkinter is included with Python.
-"""
-
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import date, datetime
+import webbrowser
 
 
 # -------------------------------------------------------
 # Colour Palette and Font Settings
 # -------------------------------------------------------
-BG          = "#F8FAFC"
-SIDEBAR_BG  = "#0F172A"
-ACCENT      = "#3B82F6"
-ACCENT_DARK = "#2563EB"
-WHITE       = "#FFFFFF"
-TEXT_DARK   = "#0F172A"
-TEXT_LIGHT  = "#475569"
-SUCCESS     = "#10B981"
-WARNING     = "#F59E0B"
-DANGER      = "#EF4444"
-ROW_ODD     = "#F1F5F9"
-ROW_EVEN    = "#FFFFFF"
+BG          = "#F0F0F0"
+SIDEBAR_BG  = "midnightblue"
+ACCENT      = "royalblue"
+ACCENT_DARK = "navy"
+WHITE       = "white"
+TEXT_DARK   = "black"
+TEXT_LIGHT  = "gray20"
+SUCCESS     = "forestgreen"
+WARNING     = "darkorange"
+DANGER      = "firebrick"
+ROW_ODD     = "aliceblue"
+ROW_EVEN    = "white"
 
-FONT_HEADING  = ("Helvetica Neue", 20, "bold")
-FONT_SUBHEAD  = ("Helvetica Neue", 14, "bold")
-FONT_LABEL    = ("Helvetica Neue", 11)
-FONT_BOLD     = ("Helvetica Neue", 11, "bold")
-FONT_SMALL    = ("Helvetica Neue", 10)
-FONT_MONO     = ("Menlo", 11)
+FONT_HEADING  = ("Arial", 18, "bold")
+FONT_SUBHEAD  = ("Arial", 14, "bold")
+FONT_LABEL    = ("Arial", 11)
+FONT_BOLD     = ("Arial", 11, "bold")
+FONT_SMALL    = ("Arial", 9)
+FONT_MONO     = ("Courier", 10)
 
 
 # -------------------------------------------------------
@@ -44,21 +37,21 @@ def make_label(parent, text, font=FONT_LABEL, fg=TEXT_DARK, bg=BG, **kw):
 
 def make_entry(parent, width=28):
     e = tk.Entry(parent, width=width, font=FONT_LABEL,
-                 relief="flat", bd=0,
+                 relief="solid", bd=1,
                  highlightthickness=1,
-                 highlightbackground="#CBD5E1",
+                 highlightbackground="lightgrey",
                  highlightcolor=ACCENT,
                  fg=TEXT_DARK, bg=WHITE, insertbackground=TEXT_DARK)
     return e
 
 
 def make_button(parent, text, command, color=ACCENT, fg=WHITE, width=18):
-    # macOS ignores background colors on native tk.Buttons.
-    # Using tk.Label bound to click events creates perfectly colored, cross-platform flat buttons.
+    # Using tk.Label bound to click events creates cross-platform flat buttons.
     btn = tk.Label(
         parent, text=text,
         bg=color, fg=fg, font=FONT_BOLD,
-        padx=10, pady=6, cursor="hand2", width=width
+        padx=10, pady=6, cursor="hand2", width=width,
+        relief="raised", bd=2
     )
     btn.bind("<Button-1>", lambda e: command())
     return btn
@@ -78,7 +71,7 @@ class HotelApp(tk.Tk):
 
         self.hotel = hotel  # reference to the Hotel model
 
-        self.title("Grand Azure Hotel — Booking System")
+        self.title("WAKA Hotel — Booking System")
         self.geometry("1050x650")
         self.minsize(900, 580)
         self.configure(bg=BG)
@@ -103,8 +96,8 @@ class HotelApp(tk.Tk):
 
         # Hotel name in sidebar
         tk.Label(
-            self.sidebar, text="Grand Azure\nHotel",
-            font=("Helvetica Neue", 12, "bold"), bg=SIDEBAR_BG,
+            self.sidebar, text="WAKA\nHotel",
+            font=("Arial", 12, "bold"), bg=SIDEBAR_BG,
             fg=WHITE, justify="center"
         ).pack(pady=(4, 24))
 
@@ -137,12 +130,25 @@ class HotelApp(tk.Tk):
         # Version info at bottom of sidebar
         tk.Label(
             self.sidebar,
-            text="SEGi University\nJan 2026",
+            text="SEGi University\n ",
             font=FONT_SMALL, bg=SIDEBAR_BG,
             fg="#566573"
         ).pack(side="bottom", pady=16)
 
-        # Right content area
+        # Support Section
+        support_btn = tk.Label(
+            self.sidebar, text="Contact Support",
+            font=FONT_SMALL, bg=SIDEBAR_BG, fg="lightblue",
+            cursor="hand2"
+        )
+        
+        def open_website(event):
+            webbrowser.open("https://github.com/waqarro")
+            
+        support_btn.bind("<Button-1>", open_website)
+        support_btn.pack(side="bottom", pady=0)
+
+        # Right content areau
         self.content = tk.Frame(self, bg=BG)
         self.content.pack(side="right", fill="both", expand=True)
 
@@ -200,7 +206,7 @@ class HotelApp(tk.Tk):
             card.grid(row=0, column=i, padx=6, sticky="nsew")
             cards_frame.columnconfigure(i, weight=1)
 
-            tk.Label(card, text=str(value), font=("Helvetica Neue", 22, "bold"),
+            tk.Label(card, text=str(value), font=("Arial", 22, "bold"),
                      fg=color, bg=WHITE).pack()
             tk.Label(card, text=label, font=FONT_SMALL,
                      fg=TEXT_LIGHT, bg=WHITE).pack()
@@ -211,14 +217,14 @@ class HotelApp(tk.Tk):
         tk.Label(rev_frame, text="Total Revenue",
                  font=FONT_BOLD, fg=WHITE, bg=SUCCESS).pack(side="left")
         tk.Label(rev_frame, text=f"RM {stats['total_revenue']:,.2f}",
-                 font=("Helvetica Neue", 16, "bold"), fg=WHITE, bg=SUCCESS).pack(side="right")
+                 font=("Arial", 16, "bold"), fg=WHITE, bg=SUCCESS).pack(side="right")
 
         # Occupancy bar
         occ = stats["booked_rooms"] / stats["total_rooms"] if stats["total_rooms"] else 0
         occ_frame = tk.Frame(self.content, bg=WHITE, padx=24, pady=16,
                              highlightthickness=1, highlightbackground="#E8EAF6")
         occ_frame.pack(fill="x", padx=28, pady=(0, 16))
-        tk.Label(occ_frame, text=f"Occupancy Rate   {occ*100:.1f}%",
+        tk.Label(occ_frame, text=f"Rooms Used: {occ*100:.1f}%",
                  font=FONT_BOLD, fg=TEXT_DARK, bg=WHITE).pack(anchor="w")
         bar_bg = tk.Frame(occ_frame, bg="#E8EAF6", height=12)
         bar_bg.pack(fill="x", pady=(6, 0))

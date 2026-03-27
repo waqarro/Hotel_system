@@ -99,7 +99,7 @@ class Booking:
         thin = "-" * 44
         return (
             f"{line}\n"
-            f"       GRAND AZURE HOTEL\n"
+            f"       WAKA HOTEL\n"
             f"         BOOKING RECEIPT\n"
             f"{line}\n"
             f"Booking ID   : {self.__booking_id}\n"

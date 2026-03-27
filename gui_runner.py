@@ -10,7 +10,7 @@ def run():
     from models.hotel import Hotel
     from gui.app import HotelApp
     
-    hotel = Hotel("Grand Azure Hotel")
+    hotel = Hotel("WAKA Hotel")
     app = HotelApp(hotel)
     app.mainloop()
 

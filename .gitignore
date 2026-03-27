@@ -6,6 +6,6 @@ __pycache__/
 # macOS
 .DS_Store
 
-# Hotel System Data (Do not publish private customer data)
+# Hotel System Data 
 data/
 Receipts/

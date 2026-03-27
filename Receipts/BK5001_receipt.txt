@@ -1,5 +1,5 @@
 ============================================
-       GRAND AZURE HOTEL
+       WAKA HOTEL
          BOOKING RECEIPT
 ============================================
 Booking ID   : BK5001
@@ -18,5 +18,5 @@ Nights       : 2
 Rate/Night   : RM 150.00
 --------------------------------------------
 TOTAL        : RM 300.00
-Status       : Confirmed
+Status       : Checked Out
 ============================================
