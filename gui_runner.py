@@ -7,11 +7,9 @@ def run():
         print("Tkinter not installed.", file=sys.stderr)
         sys.exit(1)
         
-    from models.hotel import Hotel
     from gui.app import HotelApp
     
-    hotel = Hotel("WAKA Hotel")
-    app = HotelApp(hotel)
+    app = HotelApp()
     app.mainloop()
 
 if __name__ == "__main__":

@@ -10,8 +10,43 @@ from rich.text import Text
 console = Console()
 
 class HotelCLI:
-    def __init__(self, hotel):
-        self.hotel = hotel
+    def __init__(self):
+        import os, json
+        from models.hotel import Hotel
+        from rich.prompt import Prompt
+        
+        os.makedirs("data", exist_ok=True)
+        if not os.path.exists("data/auth.json"):
+            console.clear()
+            console.print(Panel("[bold cyan]First-Time System Setup[/]", expand=False))
+            username = Prompt.ask("[yellow]Enter New Admin Username[/]")
+            password = Prompt.ask("[yellow]Enter New Admin Password[/]", password=True)
+            hotel_name = Prompt.ask("[yellow]Enter Your Hotel Name[/]")
+            
+            with open("data/auth.json", "w") as f:
+                json.dump({"username": username, "password": password, "hotel_name": hotel_name}, f)
+            
+            self.current_user = username
+            self.hotel_name = hotel_name
+            console.print("[bold green]Setup Complete! Welcome to[/] [bold white]" + hotel_name + "[/]")
+            import time; time.sleep(1)
+        else:
+            console.clear()
+            with open("data/auth.json", "r") as f:
+                data = json.load(f)
+            
+            self.hotel_name = data["hotel_name"]
+            console.print(Panel(f"[bold cyan]Welcome back to {self.hotel_name}, {data['username']}![/]", expand=False))
+            
+            while True:
+                pwd = Prompt.ask("[yellow]Enter Password[/]", password=True)
+                if pwd == data["password"]:
+                    self.current_user = data["username"]
+                    break
+                else:
+                    console.print("[bold red]Incorrect password. Try again.[/]")
+                    
+        self.hotel = Hotel(self.hotel_name)
 
     def run(self):
         while True:
@@ -29,11 +64,12 @@ class HotelCLI:
             menu.add_row("[4]", "View All Guests")
             menu.add_row("[5]", "Make New Booking")
             menu.add_row("[6]", "Manage Bookings")
+            menu.add_row("[L]", "Logout")
             menu.add_row("[0]", "Exit")
             
-            console.print(Panel(menu, title="[yellow]Main Menu", box=box.ROUNDED, expand=False, border_style="yellow"))
+            console.print(Panel(menu, title="[yellow]Main Menu[/]", box=box.ROUNDED, expand=False, border_style="yellow"))
             
-            choice = Prompt.ask("[bold cyan]Enter your choice[/]", choices=["1", "2", "3", "4", "5", "6", "0"], default="1")
+            choice = Prompt.ask("[bold cyan]Enter your choice[/]", choices=["1", "2", "3", "4", "5", "6", "L", "l", "0"], default="1")
             
             if choice == '1':
                 self.show_dashboard()
@@ -47,6 +83,11 @@ class HotelCLI:
                 self.new_booking()
             elif choice == '6':
                 self.manage_bookings()
+            elif choice.upper() == 'L':
+                console.print("[bold yellow]Logging out...[/]")
+                import time; time.sleep(1)
+                self.__init__() # Re-authenticates
+                continue
             elif choice == '0':
                 console.print("\n[bold green]Thank you for using the Hotel Booking System. Goodbye![/]\n")
                 break

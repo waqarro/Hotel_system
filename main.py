@@ -28,13 +28,41 @@ def ensure_dependencies():
             sys.exit(1)
 
 def try_gui():
-    print("\n\033[94m[System]\033[0m Attempting to launch Graphical User Interface (GUI)...")
+    print("\n\033[94m[System]\033[0m Checking GUI requirements...")
+    try:
+        import tkinter
+    except ImportError:
+        print("\n\033[93m[System] Tkinter is missing! Attempting automatic OS-level install...\033[0m")
+        if sys.platform == "darwin":
+            if subprocess.run(["which", "brew"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+                print("\033[96m[Mac] Running: brew install python-tk\033[0m")
+                subprocess.run(["brew", "install", "python-tk"])
+            else:
+                print("\033[91m[Error] macOS requires Homebrew to auto-install Tkinter. Please install Python from python.org.\033[0m")
+                return False
+        elif sys.platform.startswith("linux"):
+            if subprocess.run(["which", "apt-get"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+                print("\033[96m[Linux] Found apt. Your password may be required to install python3-tk.\033[0m")
+                subprocess.run(["sudo", "apt-get", "update"])
+                subprocess.run(["sudo", "apt-get", "install", "-y", "python3-tk"])
+            else:
+                print("\033[91m[Error] Auto-install only supports apt-based Linux distributions.\033[0m")
+                return False
+        else:
+            print("\033[91m[Error] Windows requires Tkinter to be selected during the standard Python installation wizard.\033[0m")
+            return False
+
+        try:
+            import tkinter
+            print("\033[92m[System] Tkinter installed successfully!\033[0m")
+        except ImportError:
+            return False
+
+    print("\n\033[94m[System]\033[0m Launching Graphical User Interface (GUI)...")
     try:
         result = subprocess.run([sys.executable, "gui_runner.py"])
         if result.returncode == 0:
             return True
-        return False
-    except FileNotFoundError:
         return False
     except Exception:
         return False
@@ -77,11 +105,8 @@ def main():
         run_console = True
         
     if run_console:
-        from models.hotel import Hotel
         from cli import HotelCLI
-
-        hotel = Hotel("WAKA Hotel")
-        app = HotelCLI(hotel)
+        app = HotelCLI()
         
         try:
             app.run()

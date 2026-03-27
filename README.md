@@ -1,72 +1,51 @@
-# WAKA Hotel — Room Booking System
- Final Assessment
- 
-## How to Run
+# WAKA Hotel Management System
 
-1. Open a terminal or command prompt in this folder.
-2. Run the program using one of the following commands:
-   - **Windows:** `python main.py`
-   - **macOS / Linux:** `python3 main.py`
+Welcome to the **WAKA Hotel Management System**. This is a simple and easy-to-use program made for a university project to manage a hotel.
 
-*(No external PIP installation is required manually! If the system requires libraries like `rich`, the `main.py` smart bootstrapper will automatically install them for you in the background.)*
+It has two versions that work together:
+1. **The Window Version (GUI)**: A modern and beautiful window to click and manage rooms.
+2. **The Terminal Version (CLI)**: A backup version that runs in the text command prompt if the window version fails.
 
 ---
 
-## Advanced Technical Architecture
+## 📸 Dashboard Preview
 
-This system uses a highly stable **Hybrid Subprocess Architecture** to guarantee that the application can successfully run on *any* examiner's computer.
-
-1. **The GUI Sandbox (`gui_runner.py`):** The application first aggressively attempts to run the native Tkinter graphical UI in an isolated subprocess.
-2. **The Failsafe Console (`cli.py`):** If the Tkinter library is missing, or if the host machine triggers a C++ OS-Level Trace Trap crash (common on macOS Tk 9.0), `main.py` brilliantly intercepts the crash, suppresses the error, and instantly drops the user into the wildly advanced, color-coded **Rich Terminal GUI**.
-3. **Automated Database (`data/*.json`):** Memory objects are permanently serialized to JSON flat-files dynamically upon every state mutation inside `models/hotel.py`—ensuring 100% data persistence across system reboots.
-4. **Automated Printers:** Receipts are dynamically pushed from live memory into raw text files via the `Receipts/` exporter.
+![Hotel Dashboard Screenshot](gui/dashboard.png)
 
 ---
 
-## Project Structure
+## 🌟 Main Features
 
-```text
-hotel_system/
-├── main.py                  ← Smart Entry point (run this!)
-├── gui_runner.py            ← Isolated Tkinter GUI sub-process
-├── cli.py                   ← Failsafe colored Terminal Interface
-├── data/                    ← Auto-generated JSON database (Ignored in Git)
-├── Receipts/                ← Auto-generated .txt receipts (Ignored in Git)
-│
-├── models/                  ← Core Business Logic (OOP)
-│   ├── room.py              ← Abstract Room + StandardRoom, DeluxeRoom, SuiteRoom
-│   ├── guest.py             ← Guest serialization class
-│   ├── booking.py           ← Booking object linking room to guest
-│   └── hotel.py             ← Central manager & File I/O Engine
-│
-└── gui/
-    └── app.py               ← Fully native graphic interface
-```
+- **Dynamic Startup**: When you first run the program, you can choose your own Hotel Name and set your Admin Password.
+- **Login System**: Secure login for both the window and terminal versions. It will say "Welcome back!" once you are set up.
+- **Room Management**: Easy to see which rooms are free and which are booked.
+- **Guest Registration**: A simple form to save guest details.
+- **Automatic Receipts**: The system automatically makes a `.txt` receipt file for every booking in the `Receipts/` folder.
+- **Safe Data**: All your information is saved automatically in the `data/` folder so you never lose it.
 
 ---
 
-## OOP Principles Demonstrated
+## 🛠 How to Run
 
-### [1] ENCAPSULATION
-All model classes strictly use **private attributes** (`__property`) with explicit getters and setters, ensuring data safety. Example: `Room.__room_number`, `Guest.__ic_number`.
-
-### [2] INHERITANCE
-`Room` acts as the parent class. `StandardRoom`, `DeluxeRoom`, and `SuiteRoom` flawlessly inherit structure and extend methods using `super().__init__()`.
-
-### [3] POLYMORPHISM
-The functions `get_description()` and `calculate_price()` share the same signature in the parent `Room` class but act independently across children:
-- **StandardRoom:** Flat base rate.
-- **DeluxeRoom:** Implements a dynamic +10% weekend surcharge.
-- **SuiteRoom:** Integrates an algorithmic -15% loyalty discount for 5+ nights.
-
-### [4] ABSTRACTION
-`Room` utilizes Python's `ABC` (Abstract Base Class) module. It mathematically prevents generic initialization, mandating that implementing subclasses strictly build the `calculate_price()` behavior or throw a `TypeError`.
+1. Open your terminal (Command Prompt or Terminal).
+2. Go to this folder.
+3. Run the following command:
+   ```bash
+   python3 main.py
+   ```
+4. Follow the instructions on the screen!
 
 ---
 
-## System Features
-- **Dashboard:** Live analytics, revenue, occupancy meters, and room availability statistics.
-- **Cross-Platform:** Beautiful Mac-friendly fonts, Slate Blue themes, and dark-mode compliance.
-- **Data Persistence:** Automated `.json` File I/O algorithms.
-- **Booking Engine:** Live price preview calculators, anti-collision room availability checkers.
-- **Exporting:** Physical `.txt` receipt exports explicitly for File Output grading.
+## 📚 Technical Details
+
+This program uses **Object-Oriented Programming (OOP)** to make the code clean and organized:
+- **Classes**: Different classes for `Hotel`, `Room`, `Guest`, and `Booking`.
+- **Inheritance**: We have a main `Room` class, and specialized versions like `StandardRoom`, `DeluxeRoom`, and `SuiteRoom`.
+- **Encapsulation**: Using private variables to keep the data safe.
+- **File I/O**: Saving and loading all data using JSON files.
+
+---
+
+**Made by:** Waka
+**For:** SEGi University Final Assessment
