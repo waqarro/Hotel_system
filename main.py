@@ -20,10 +20,10 @@ def ensure_dependencies():
                 cmd.append("--break-system-packages")
                 subprocess.check_call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 
-            print("\033[92m✔ Installation complete!\033[0m Starting application...\n")
+            print("\033[92mInstallation complete!\033[0m Starting application...\n")
             time.sleep(1)
         except Exception as e:
-            print(f"\n\033[91m✖ Failed to automatically install dependencies: {e}\033[0m")
+            print(f"\n\033[91mFailed to automatically install dependencies: {e}\033[0m")
             print("Please manually run: pip install rich")
             sys.exit(1)
 

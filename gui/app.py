@@ -103,10 +103,6 @@ class HotelApp(tk.Tk):
 
         # Hotel name in sidebar
         tk.Label(
-            self.sidebar, text="🏨", font=("Helvetica Neue", 28),
-            bg=SIDEBAR_BG, fg=WHITE
-        ).pack(pady=(28, 0))
-        tk.Label(
             self.sidebar, text="Grand Azure\nHotel",
             font=("Helvetica Neue", 12, "bold"), bg=SIDEBAR_BG,
             fg=WHITE, justify="center"
@@ -754,7 +750,7 @@ class HotelApp(tk.Tk):
         with open(path, "w") as f:
             f.write(booking.get_receipt_text())
             
-        tk.Label(popup, text=f"✔ Saved to {path}", font=FONT_SMALL, fg=SUCCESS, bg=WHITE).pack(pady=(8, 0))
+        tk.Label(popup, text=f"Saved to {path}", font=FONT_SMALL, fg=SUCCESS, bg=WHITE).pack(pady=(8, 0))
 
         make_button(popup, "Close", popup.destroy, color=ACCENT_DARK, width=14
                     ).pack(pady=10)

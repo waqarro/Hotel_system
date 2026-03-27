@@ -16,20 +16,20 @@ class HotelCLI:
     def run(self):
         while True:
             console.clear()
-            title = Text(f"🏨 {self.hotel.get_name()} Booking System", style="bold cyan", justify="center")
+            title = Text(f"{self.hotel.get_name()} Booking System", style="bold cyan", justify="center")
             console.print(Panel(title, box=box.DOUBLE, padding=(1, 2), border_style="cyan"))
             
             menu = Table.grid(padding=(0, 2))
             menu.add_column(style="bold green", justify="right")
             menu.add_column(style="white")
             
-            menu.add_row("[1]", "📊 Dashboard")
-            menu.add_row("[2]", "🛏️  View All Rooms")
-            menu.add_row("[3]", "📝 Register Guest")
-            menu.add_row("[4]", "👥 View All Guests")
-            menu.add_row("[5]", "➕ Make New Booking")
-            menu.add_row("[6]", "⚙️  Manage Bookings")
-            menu.add_row("[0]", "❌ Exit")
+            menu.add_row("[1]", "Dashboard")
+            menu.add_row("[2]", "View All Rooms")
+            menu.add_row("[3]", "Register Guest")
+            menu.add_row("[4]", "View All Guests")
+            menu.add_row("[5]", "Make New Booking")
+            menu.add_row("[6]", "Manage Bookings")
+            menu.add_row("[0]", "Exit")
             
             console.print(Panel(menu, title="[yellow]Main Menu", box=box.ROUNDED, expand=False, border_style="yellow"))
             
@@ -111,9 +111,9 @@ class HotelCLI:
 
         try:
             guest = self.hotel.register_guest(name, ic, phone, email)
-            console.print(f"\n[bold green]✔ Success![/] Guest registered with ID: [bold white]{guest.get_guest_id()}[/]")
+            console.print(f"\n[bold green]Success![/] Guest registered with ID: [bold white]{guest.get_guest_id()}[/]")
         except Exception as e:
-            console.print(f"\n[bold red]✖ Error:[/] {e}")
+            console.print(f"\n[bold red]Error:[/] {e}")
 
     def show_guests(self):
         console.clear()
@@ -155,7 +155,7 @@ class HotelCLI:
         guest_id = Prompt.ask("[cyan]Enter Guest ID[/]").upper()
         guest = self.hotel.find_guest(guest_id)
         if not guest:
-            console.print("[bold red]✖ Error:[/] Guest not found. Please register the guest first.")
+            console.print("[bold red]Error:[/] Guest not found. Please register the guest first.")
             return
 
         try:
@@ -169,13 +169,13 @@ class HotelCLI:
             
             nights = int(Prompt.ask("[cyan]Number of Nights[/]"))
         except ValueError:
-            console.print("[bold red]✖ Error:[/] Invalid input format. Please check your numbers and dates.")
+            console.print("[bold red]Error:[/] Invalid input format. Please check your numbers and dates.")
             return
 
         try:
             booking = self.hotel.make_booking(guest, room_num, checkin, nights)
             console.print(Panel(
-                f"[bold green]✔ Booking Confirmed![/]\n"
+                f"[bold green]Booking Confirmed![/]\n"
                 f"Booking ID: [bold white]{booking.get_booking_id()}[/]\n"
                 f"Total Price: [bold yellow]RM {booking.get_total_price():.2f}[/]",
                 border_style="green", expand=False
@@ -188,7 +188,7 @@ class HotelCLI:
             console.print(f"[dim]Receipt also saved to: Receipts/{booking.get_booking_id()}_receipt.txt[/]")
             
         except Exception as e:
-            console.print(f"\n[bold red]✖ Error:[/] {e}")
+            console.print(f"\n[bold red]Error:[/] {e}")
 
     def manage_bookings(self):
         console.clear()
@@ -240,14 +240,14 @@ class HotelCLI:
         try:
             if action == '1':
                 self.hotel.check_in(bid)
-                console.print(f"[bold green]✔ Successfully checked in booking {bid}![/]")
+                console.print(f"[bold green]Successfully checked in booking {bid}![/]")
             elif action == '2':
                 self.hotel.check_out(bid)
-                console.print(f"[bold green]✔ Successfully checked out booking {bid}![/]")
+                console.print(f"[bold green]Successfully checked out booking {bid}![/]")
             elif action == '3':
                 if Confirm.ask("[bold red]Are you sure you want to cancel this booking?[/]"):
                     self.hotel.cancel_booking(bid)
-                    console.print(f"[bold green]✔ Booking {bid} cancelled.[/]")
+                    console.print(f"[bold green]Booking {bid} cancelled.[/]")
             elif action == '4':
                 b = self.hotel.find_booking(bid)
                 if b:
@@ -261,6 +261,6 @@ class HotelCLI:
                         f.write(b.get_receipt_text())
                     console.print(f"\n[dim]Receipt downloaded to: Receipts/{b.get_booking_id()}_receipt.txt[/]")
                 else:
-                    console.print("[bold red]✖ Error:[/] Booking not found.")
+                    console.print("[bold red]Error:[/] Booking not found.")
         except Exception as e:
-            console.print(f"[bold red]✖ Error:[/] {e}")
+            console.print(f"[bold red]Error:[/] {e}")

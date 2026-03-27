@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# macOS
+.DS_Store
+
+# Hotel System Data (Do not publish private customer data)
+data/
+Receipts/
