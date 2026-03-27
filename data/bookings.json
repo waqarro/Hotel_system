@@ -1,0 +1,11 @@
+[
+    {
+        "booking_id": "BK5001",
+        "guest_id": "G1001",
+        "room_number": 101,
+        "check_in": "2026-03-27",
+        "nights": 2,
+        "status": "Confirmed",
+        "created_at": "2026-03-27T11:40:02.840802"
+    }
+]
