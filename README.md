@@ -8,13 +8,13 @@ It has two versions that work together:
 
 ---
 
-## 📸 Dashboard Preview
+## Dashboard Preview
 
 ![Hotel Dashboard Screenshot](gui/dashboard.png)
 
 ---
 
-## 🌟 Main Features
+##  Main Features
 
 - **Dynamic Startup**: When you first run the program, you can choose your own Hotel Name and set your Admin Password.
 - **Login System**: Secure login for both the window and terminal versions. It will say "Welcome back!" once you are set up.
@@ -25,7 +25,7 @@ It has two versions that work together:
 
 ---
 
-## 🛠 How to Run
+##  How to Run
 
 1. Open your terminal (Command Prompt or Terminal).
 2. Go to this folder.
@@ -37,7 +37,7 @@ It has two versions that work together:
 
 ---
 
-## 📚 Technical Details
+##  Technical Details
 
 This program uses **Object-Oriented Programming (OOP)** to make the code clean and organized:
 - **Classes**: Different classes for `Hotel`, `Room`, `Guest`, and `Booking`.
