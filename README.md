@@ -37,7 +37,18 @@ It has two versions that work together:
 
 ---
 
-##  Technical Details
+## Manual Installation (If Auto-Install fails)
+
+If the program says a library is missing and it cannot install it automatically, please run these commands:
+
+### For the GUI Window (Tkinter)
+- **On Mac:** `brew install python-tk`
+- **On Linux (Ubuntu/Debian):** `sudo apt-get install python3-tk`
+- **On Windows:** Please re-run the Python installer and make sure "tcl/tk and IDLE" is checked.
+
+---
+
+## Technical Details
 
 This program uses **Object-Oriented Programming (OOP)** to make the code clean and organized:
 - **Classes**: Different classes for `Hotel`, `Room`, `Guest`, and `Booking`.
