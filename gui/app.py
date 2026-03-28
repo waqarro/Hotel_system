@@ -4,9 +4,7 @@ from datetime import date, datetime
 import webbrowser
 
 
-# -------------------------------------------------------
 # Colour Palette and Font Settings
-# -------------------------------------------------------
 bg_color          = "#F0F0F0"
 SIDEBAR_bg_color  = "midnightblue"
 primary_color      = "royalblue"
@@ -28,9 +26,7 @@ font_small    = ("Arial", 9)
 FONT_MONO     = ("Courier", 10)
 
 
-# -------------------------------------------------------
 # Helper: styled label
-# -------------------------------------------------------
 def make_label(parent, text, font=font_normal, fg=TEXT_DARK, bg=bg_color, **kw):
     return tk.Label(parent, text=text, font=font, fg=fg, bg=bg, **kw)
 
@@ -57,9 +53,7 @@ def create_primary_button(parent, text, command, color=primary_color, fg=white_c
     return btn
 
 
-# -------------------------------------------------------
 # Main Application Window
-# -------------------------------------------------------
 class HotelApp(tk.Tk):
     def _check_auth(self):
         import os
@@ -653,7 +647,7 @@ class HotelApp(tk.Tk):
         tk.Label(right, text="Double-click to select a room",
                  font=font_small, fg=text_grey, bg=white_color).pack(pady=4)
 
-        # --- Form fields ---
+        #  Form fields 
         tk.Label(form, text="Guest ID *", font=FONT_BOLD, fg=TEXT_DARK,
                  bg=white_color, anchor="w").pack(anchor="w", pady=(0, 2))
         guest_entry = create_entry(form, 32)
