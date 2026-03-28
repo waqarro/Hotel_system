@@ -1,12 +1,3 @@
-"""
-models/guest.py
-Hotel Room Booking System - SEGi University Final Assessment
-
-OOP Principles used in this file:
-- Encapsulation : All attributes are private with getters and setters
-- Polymorphism  : __str__ overrides default object string representation
-"""
-
 
 class Guest:
     """
@@ -27,7 +18,7 @@ class Guest:
         self.__email     = email.strip()
         self.__bookings  = []   # private list of bookings
 
-    # --- Getters ---
+    #  Getters 
     def get_guest_id(self):
         return self.__guest_id
 
@@ -35,7 +26,7 @@ class Guest:
         return self.__name
 
     def get_ic_number(self):
-        # Mask IC number for privacy - only show last 4 digits
+        # Mask IC number for privacy  only show last 4 digits
         if len(self.__ic_number) > 4:
             return "*" * (len(self.__ic_number) - 4) + self.__ic_number[-4:]
         return self.__ic_number
@@ -52,7 +43,7 @@ class Guest:
     def get_bookings(self):
         return list(self.__bookings)    # return copy to protect private list
 
-    # --- Setters with validation ---
+    #  Setters with validation 
     def set_name(self, name):
         if not name.strip():
             raise ValueError("Name cannot be empty.")
@@ -68,7 +59,7 @@ class Guest:
             raise ValueError("Invalid email format.")
         self.__email = email.strip()
 
-    # --- Methods for managing bookings ---
+    #  Methods for managing bookings 
     def add_booking(self, booking):
         self.__bookings.append(booking)
 
@@ -79,7 +70,7 @@ class Guest:
                 return True
         return False
 
-    # --- Serialization ---
+    #  Serialization 
     def to_dict(self):
         return {
             "guest_id": self.__guest_id,
@@ -101,7 +92,7 @@ class Guest:
             
         return g
 
-    # --- Polymorphism: overrides default __str__ ---
+    #  Polymorphism: overrides default __str__ 
     def __str__(self):
         return (f"[{self.__guest_id}] {self.__name} | "
                 f"IC: {self.get_ic_number()} | Phone: {self.__phone}")

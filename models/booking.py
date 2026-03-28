@@ -1,12 +1,3 @@
-"""
-models/booking.py
-Hotel Room Booking System - SEGi University Final Assessment
-
-OOP Principles used in this file:
-- Encapsulation     : Private attributes with getters
-- Object Interaction: Booking connects Guest and Room objects together
-"""
-
 from datetime import date, timedelta, datetime
 
 
@@ -32,7 +23,7 @@ class Booking:
 
         Booking._id_counter += 1
 
-        # Private attributes - Encapsulation
+        # Private attributes = Encapsulation
         self.__booking_id   = f"BK{Booking._id_counter}"
         self.__guest        = guest                          # Object Interaction
         self.__room         = room                          # Object Interaction
@@ -47,7 +38,7 @@ class Booking:
         room.set_booked(True)
         guest.add_booking(self)
 
-    # --- Getters ---
+    #  Getters 
     def get_booking_id(self):
         return self.__booking_id
 
@@ -75,7 +66,7 @@ class Booking:
     def get_created_at(self):
         return self.__created_at
 
-    # --- Status change methods ---
+    #  Status change methods 
     def do_check_in(self):
         if self.__status != self.CONFIRMED:
             raise ValueError("Only confirmed bookings can be checked in.")
@@ -94,12 +85,13 @@ class Booking:
         self.__room.set_booked(False)   # Object Interaction: free the room
         self.__guest.remove_booking(self.__booking_id)
 
+    #  Receipt function
     def get_receipt_text(self):
         line = "=" * 44
         thin = "-" * 44
         return (
             f"{line}\n"
-            f"       WAKA HOTEL\n"
+            f"         WAKA HOTEL\n"
             f"         BOOKING RECEIPT\n"
             f"{line}\n"
             f"Booking ID   : {self.__booking_id}\n"
@@ -122,7 +114,7 @@ class Booking:
             f"{line}\n"
         )
 
-    # --- Serialization ---
+    #  Serialization 
     def to_dict(self):
         return {
             "booking_id": self.__booking_id,

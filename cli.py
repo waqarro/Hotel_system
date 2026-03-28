@@ -1,75 +1,58 @@
 from datetime import datetime
-from rich.console import Console
-from rich.table import Table
-from rich.panel import Panel
-from rich.prompt import Prompt, Confirm
-from rich import box
-from rich.layout import Layout
-from rich.text import Text
-
-console = Console()
 
 class HotelCLI:
     def __init__(self):
         import os, json
         from models.hotel import Hotel
-        from rich.prompt import Prompt
         
         os.makedirs("data", exist_ok=True)
         if not os.path.exists("data/auth.json"):
-            console.clear()
-            console.print(Panel("[bold cyan]First-Time System Setup[/]", expand=False))
-            username = Prompt.ask("[yellow]Enter New Admin Username[/]")
-            password = Prompt.ask("[yellow]Enter New Admin Password[/]", password=True)
-            hotel_name = Prompt.ask("[yellow]Enter Your Hotel Name[/]")
+            
+            print("\n=== First-Time System Setup ===")
+            username = input("Enter New Admin Username: ")
+            password = input("Enter New Admin Password: ")
+            hotel_name = input("Enter Your Hotel Name: ")
             
             with open("data/auth.json", "w") as f:
                 json.dump({"username": username, "password": password, "hotel_name": hotel_name}, f)
             
             self.current_user = username
             self.hotel_name = hotel_name
-            console.print("[bold green]Setup Complete! Welcome to[/] [bold white]" + hotel_name + "[/]")
+            print(f"\nSetup Complete! Welcome to {hotel_name}")
             import time; time.sleep(1)
         else:
-            console.clear()
             with open("data/auth.json", "r") as f:
                 data = json.load(f)
             
             self.hotel_name = data["hotel_name"]
-            console.print(Panel(f"[bold cyan]Welcome back to {self.hotel_name}, {data['username']}![/]", expand=False))
+            print(f"\nWelcome back to {self.hotel_name}, {data['username']}!")
             
             while True:
-                pwd = Prompt.ask("[yellow]Enter Password[/]", password=True)
+                pwd = input("Enter Password: ")
                 if pwd == data["password"]:
                     self.current_user = data["username"]
                     break
                 else:
-                    console.print("[bold red]Incorrect password. Try again.[/]")
+                    print("Incorrect password. Try again.")
                     
         self.hotel = Hotel(self.hotel_name)
 
     def run(self):
         while True:
-            console.clear()
-            title = Text(f"{self.hotel.get_name()} Booking System", style="bold cyan", justify="center")
-            console.print(Panel(title, box=box.DOUBLE, padding=(1, 2), border_style="cyan"))
+            print("\n" + "="*40)
+            print(f"  {self.hotel.get_name()} Booking System")
+            print("="*40)
+            print(" [1] Dashboard")
+            print(" [2] View All Rooms")
+            print(" [3] Register Guest")
+            print(" [4] View All Guests")
+            print(" [5] Make New Booking")
+            print(" [6] Manage Bookings")
+            print(" [L] Logout")
+            print(" [0] Exit")
+            print("-" * 40)
             
-            menu = Table.grid(padding=(0, 2))
-            menu.add_column(style="bold green", justify="right")
-            menu.add_column(style="white")
-            
-            menu.add_row("[1]", "Dashboard")
-            menu.add_row("[2]", "View All Rooms")
-            menu.add_row("[3]", "Register Guest")
-            menu.add_row("[4]", "View All Guests")
-            menu.add_row("[5]", "Make New Booking")
-            menu.add_row("[6]", "Manage Bookings")
-            menu.add_row("[L]", "Logout")
-            menu.add_row("[0]", "Exit")
-            
-            console.print(Panel(menu, title="[yellow]Main Menu[/]", box=box.ROUNDED, expand=False, border_style="yellow"))
-            
-            choice = Prompt.ask("[bold cyan]Enter your choice[/]", choices=["1", "2", "3", "4", "5", "6", "L", "l", "0"], default="1")
+            choice = input("Enter your choice (1): ") or "1"
             
             if choice == '1':
                 self.show_dashboard()
@@ -84,224 +67,163 @@ class HotelCLI:
             elif choice == '6':
                 self.manage_bookings()
             elif choice.upper() == 'L':
-                console.print("[bold yellow]Logging out...[/]")
+                print("Logging out...")
                 import time; time.sleep(1)
-                self.__init__() # Re-authenticates
+                self.__init__() 
                 continue
             elif choice == '0':
-                console.print("\n[bold green]Thank you for using the Hotel Booking System. Goodbye![/]\n")
+                print("\nThank you for using the Hotel Booking System. Goodbye!\n")
                 break
-                
+            
             if choice != '0':
-                Prompt.ask("\n[dim]Press Enter to return to the main menu...[/]")
+                input("\nPress Enter to return to the main menu...")
 
     def show_dashboard(self):
-        console.clear()
         stats = self.hotel.get_stats()
-        
-        table = Table(title="Hotel Dashboard", show_header=False, box=box.SIMPLE_HEAVY, title_style="bold magenta")
-        table.add_column("Metric", style="bold cyan")
-        table.add_column("Value", style="bold white")
-        
-        table.add_row("Total Rooms", str(stats['total_rooms']))
-        table.add_row("Available Rooms", f"[green]{stats['available_rooms']}[/green]")
-        table.add_row("Booked Rooms", f"[red]{stats['booked_rooms']}[/red]")
-        table.add_row("Total Guests", str(stats['total_guests']))
-        table.add_row("Total Bookings", str(stats['total_bookings']))
-        table.add_row("Total Revenue", f"[bold yellow]RM {stats['total_revenue']:,.2f}[/bold yellow]")
-        
-        console.print(Panel(table, border_style="magenta", expand=False))
+        print("\n--- Hotel Dashboard ---")
+        print(f"Total Rooms     : {stats['total_rooms']}")
+        print(f"Available Rooms : {stats['available_rooms']}")
+        print(f"Booked Rooms    : {stats['booked_rooms']}")
+        print(f"Total Guests    : {stats['total_guests']}")
+        print(f"Total Bookings  : {stats['total_bookings']}")
+        print(f"Total Revenue   : RM {stats['total_revenue']:,.2f}")
+        print("-" * 23)
 
     def show_rooms(self):
-        console.clear()
         rooms = self.hotel.get_all_rooms()
-        
-        table = Table(title="All Hotel Rooms", box=box.ROUNDED, header_style="bold blue")
-        table.add_column("Room", justify="center")
-        table.add_column("Type")
-        table.add_column("Floor", justify="center")
-        table.add_column("Capacity", justify="center")
-        table.add_column("Rate/Night", justify="right")
-        table.add_column("Status", justify="center")
-        
+        print("\n--- All Hotel Rooms ---")
+        print(f"{'No':<6} {'Type':<12} {'Floor':<6} {'Cap':<6} {'Price':<12} {'Status'}")
+        print("-" * 60)
         for r in rooms:
-            status = "[bold red]Booked[/]" if r.is_booked() else "[bold green]Available[/]"
-            table.add_row(
-                str(r.get_room_number()),
-                r.get_room_type(),
-                str(r.get_floor()),
-                str(r.get_capacity()),
-                f"RM {r.get_price_per_night():.2f}",
-                status
-            )
-            
-        console.print(table)
+            status = "Booked" if r.is_booked() else "Available"
+            print(f"{str(r.get_room_number()):<6} {r.get_room_type():<12} "
+                  f"{str(r.get_floor()):<6} {str(r.get_capacity()):<6} "
+                  f"RM {r.get_price_per_night():<9.2f} {status}")
 
     def register_guest(self):
-        console.clear()
-        console.print(Panel("[bold yellow]Register a New Guest[/]", border_style="yellow", expand=False))
-        
-        name = Prompt.ask("[cyan]Full Name[/]")
-        ic = Prompt.ask("[cyan]IC/Passport Number[/]")
-        phone = Prompt.ask("[cyan]Phone Number[/]")
-        email = Prompt.ask("[cyan]Email (optional)[/]", default="")
+        print("\n--- Register a New Guest ---")
+        name = input("Full Name: ")
+        ic = input("IC/Passport Number: ")
+        phone = input("Phone Number: ")
+        email = input("Email (optional): ")
 
         if not name or not ic or not phone:
-            console.print("[bold red]Error: Name, IC, and Phone are strongly required.[/]")
+            print("Error: Name, IC, and Phone are strongly required.")
             return
 
         try:
             guest = self.hotel.register_guest(name, ic, phone, email)
-            console.print(f"\n[bold green]Success![/] Guest registered with ID: [bold white]{guest.get_guest_id()}[/]")
+            print(f"\nSuccess! Guest registered with ID: {guest.get_guest_id()}")
         except Exception as e:
-            console.print(f"\n[bold red]Error:[/] {e}")
+            print(f"\nError: {e}")
 
     def show_guests(self):
-        console.clear()
         guests = self.hotel.get_all_guests()
-        
         if not guests:
-            console.print("[yellow]No guests registered yet.[/]")
+            print("\nNo guests registered yet.")
             return
             
-        table = Table(title="Registered Guests", box=box.ROUNDED, header_style="bold blue")
-        table.add_column("ID", style="cyan")
-        table.add_column("Name", style="white")
-        table.add_column("IC/Passport")
-        table.add_column("Phone")
-        
+        print("\n--- Registered Guests ---")
+        print(f"{'ID':<10} {'Name':<20} {'IC/Passport':<15} {'Phone'}")
+        print("-" * 60)
         for g in guests:
-            table.add_row(
-                g.get_guest_id(),
-                g.get_name(),
-                g.get_ic_number(),
-                g.get_phone()
-            )
-            
-        console.print(table)
+            print(f"{g.get_guest_id():<10} {g.get_name()[:19]:<20} "
+                  f"{g.get_ic_number():<15} {g.get_phone()}")
 
     def new_booking(self):
-        console.clear()
-        console.print(Panel("[bold yellow]Make a New Booking[/]", border_style="yellow", expand=False))
-        
-        # Show available rooms first
+        print("\n--- Make a New Booking ---")
         avail_rooms = self.hotel.get_available_rooms()
         if not avail_rooms:
-            console.print("[bold red]Sorry, no rooms are currently available.[/]")
+            print("Sorry, no rooms are currently available.")
             return
             
         room_list = ", ".join([str(r.get_room_number()) for r in avail_rooms])
-        console.print(f"[dim]Available Rooms: {room_list}[/]\n")
+        print(f"Available Rooms: {room_list}\n")
         
-        guest_id = Prompt.ask("[cyan]Enter Guest ID[/]").upper()
+        guest_id = input("Enter Guest ID: ").upper()
         guest = self.hotel.find_guest(guest_id)
         if not guest:
-            console.print("[bold red]Error:[/] Guest not found. Please register the guest first.")
+            print("Error: Guest not found. Please register the guest first.")
             return
 
         try:
-            room_num = int(Prompt.ask("[cyan]Enter Room Number[/]"))
-            checkin_str = Prompt.ask("[cyan]Check-In Date (DD/MM/YYYY)[/] [dim](Leave blank for today)[/]", default="")
+            room_num = int(input("Enter Room Number: "))
+            checkin_str = input("Check-In Date (DD/MM/YYYY) (Leave blank for today): ")
             
             if not checkin_str:
                 checkin = datetime.today().date()
             else:
                 checkin = datetime.strptime(checkin_str, "%d/%m/%Y").date()
             
-            nights = int(Prompt.ask("[cyan]Number of Nights[/]"))
+            nights = int(input("Number of Nights: "))
         except ValueError:
-            console.print("[bold red]Error:[/] Invalid input format. Please check your numbers and dates.")
+            print("Error: Invalid input format. Please check your numbers and dates.")
             return
 
         try:
             booking = self.hotel.make_booking(guest, room_num, checkin, nights)
-            console.print(Panel(
-                f"[bold green]Booking Confirmed![/]\n"
-                f"Booking ID: [bold white]{booking.get_booking_id()}[/]\n"
-                f"Total Price: [bold yellow]RM {booking.get_total_price():.2f}[/]",
-                border_style="green", expand=False
-            ))
+            print(f"\nBooking Confirmed!")
+            print(f"Booking ID  : {booking.get_booking_id()}")
+            print(f"Total Price : RM {booking.get_total_price():.2f}")
             
             import os
             os.makedirs("Receipts", exist_ok=True)
-            with open(f"Receipts/{booking.get_booking_id()}_receipt.txt", "w") as f:
+            path = f"Receipts/{booking.get_booking_id()}_receipt.txt"
+            with open(path, "w") as f:
                 f.write(booking.get_receipt_text())
-            console.print(f"[dim]Receipt also saved to: Receipts/{booking.get_booking_id()}_receipt.txt[/]")
+            print(f"Receipt saved to: {path}")
             
         except Exception as e:
-            console.print(f"\n[bold red]Error:[/] {e}")
+            print(f"\nError: {e}")
 
     def manage_bookings(self):
-        console.clear()
         bookings = self.hotel.get_all_bookings()
         if not bookings:
-            console.print("[yellow]No bookings exist yet.[/]")
+            print("\nNo bookings exist yet.")
             return
             
-        table = Table(title="Manage Bookings", box=box.ROUNDED, header_style="bold blue")
-        table.add_column("ID", style="cyan")
-        table.add_column("Guest")
-        table.add_column("Room", justify="center")
-        table.add_column("Check-In")
-        table.add_column("Check-Out")
-        table.add_column("Status", justify="center")
-        
+        print("\n--- Manage Bookings ---")
+        print(f"{'ID':<10} {'Guest':<15} {'Room':<6} {'In':<12} {'Out':<12} {'Status'}")
+        print("-" * 65)
         for b in bookings:
-            status = b.get_status()
-            status_color = "white"
-            if status == "Confirmed": status_color = "blue"
-            elif status == "Checked In": status_color = "green"
-            elif status == "Checked Out": status_color = "dim"
-            elif status == "Cancelled": status_color = "red"
+            print(f"{b.get_booking_id():<10} {b.get_guest().get_name()[:14]:<15} "
+                  f"{str(b.get_room().get_room_number()):<6} "
+                  f"{b.get_check_in().strftime('%d/%m/%Y'):<12} "
+                  f"{b.get_check_out().strftime('%d/%m/%Y'):<12} "
+                  f"{b.get_status()}")
             
-            table.add_row(
-                b.get_booking_id(),
-                b.get_guest().get_name()[:15],
-                str(b.get_room().get_room_number()),
-                b.get_check_in().strftime('%d/%m/%Y'),
-                b.get_check_out().strftime('%d/%m/%Y'),
-                f"[bold {status_color}]{status}[/]"
-            )
-            
-        console.print(table)
-        
-        console.print("\n[bold cyan]Actions:[/]")
-        console.print("  [1] Check-In")
-        console.print("  [2] Check-Out")
-        console.print("  [3] Cancel Booking")
-        console.print("  [4] View Receipt")
-        console.print("  [0] Back to Menu")
-        
-        action = Prompt.ask("\n[cyan]Select an action[/]", choices=["1", "2", "3", "4", "0"], default="0")
+        print("\nActions: [1] Check-In [2] Check-Out [3] Cancel [4] View Receipt [0] Back")
+        action = input("Select an action (0): ") or "0"
         if action == '0':
             return
             
-        bid = Prompt.ask("[cyan]Enter Booking ID[/]").upper()
+        bid = input("Enter Booking ID: ").upper()
         
         try:
             if action == '1':
                 self.hotel.check_in(bid)
-                console.print(f"[bold green]Successfully checked in booking {bid}![/]")
+                print(f"Successfully checked in booking {bid}!")
             elif action == '2':
                 self.hotel.check_out(bid)
-                console.print(f"[bold green]Successfully checked out booking {bid}![/]")
+                print(f"Successfully checked out booking {bid}!")
             elif action == '3':
-                if Confirm.ask("[bold red]Are you sure you want to cancel this booking?[/]"):
+                confirm = input("Are you sure you want to cancel? (y/n): ")
+                if confirm.lower() == 'y':
                     self.hotel.cancel_booking(bid)
-                    console.print(f"[bold green]Booking {bid} cancelled.[/]")
+                    print(f"Booking {bid} cancelled.")
             elif action == '4':
                 b = self.hotel.find_booking(bid)
                 if b:
-                    receipt_panel = Panel(b.get_receipt_text(), title="[green]Receipt[/]", border_style="green", expand=False)
-                    console.clear()
-                    console.print(receipt_panel)
+                    print("\n--- Receipt ---")
+                    print(b.get_receipt_text())
                     
                     import os
                     os.makedirs("Receipts", exist_ok=True)
-                    with open(f"Receipts/{b.get_booking_id()}_receipt.txt", "w") as f:
+                    path = f"Receipts/{b.get_booking_id()}_receipt.txt"
+                    with open(path, "w") as f:
                         f.write(b.get_receipt_text())
-                    console.print(f"\n[dim]Receipt downloaded to: Receipts/{b.get_booking_id()}_receipt.txt[/]")
+                    print(f"Receipt downloaded to: {path}")
                 else:
-                    console.print("[bold red]Error:[/] Booking not found.")
+                    print("Error: Booking not found.")
         except Exception as e:
-            console.print(f"[bold red]Error:[/] {e}")
+            print(f"Error: {e}")

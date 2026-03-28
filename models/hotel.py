@@ -1,12 +1,3 @@
-"""
-models/hotel.py
-Hotel Room Booking System - SEGi University Final Assessment
-
-OOP Principles used in this file:
-- Encapsulation     : Private attributes with getters
-- Object Interaction: Hotel manages Room, Guest, and Booking objects
-"""
-
 from datetime import date
 from .room    import StandardRoom, DeluxeRoom, SuiteRoom
 from .guest   import Guest
@@ -40,7 +31,7 @@ class Hotel:
             if floor >= 3:
                 self.__rooms.append(SuiteRoom(floor))
 
-    # --- Getters ---
+    #  Getters 
     def get_name(self):
         return self.__name
 
@@ -77,7 +68,7 @@ class Hotel:
                 return r
         return None
 
-    # --- Hotel operations (Object Interaction) ---
+    #  Hotel operations (Object Interaction) 
     def register_guest(self, name, ic, phone, email=""):
         guest = Guest(name, ic, phone, email)
         self.__guests.append(guest)
@@ -133,7 +124,7 @@ class Hotel:
             "total_revenue"   : round(revenue, 2),
         }
 
-    # --- File I/O Persistence ---
+    #  File I/O Persistence 
     def save_data(self):
         os.makedirs("data", exist_ok=True)
         with open("data/guests.json", "w") as f:

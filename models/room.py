@@ -1,21 +1,8 @@
-"""
-models/room.py
-Hotel Room Booking System - SEGi University Final Assessment
-
-OOP Principles used in this file:
-- Abstraction    : Room is an abstract base class (cannot be created directly)
-- Encapsulation  : Private attributes (__room_number, __price) with getters/setters
-- Inheritance    : StandardRoom, DeluxeRoom, SuiteRoom all extend Room
-- Polymorphism   : get_description() and calculate_price() behave differently per subclass
-"""
-
 from abc import ABC, abstractmethod
 from datetime import datetime
 
 
-# -------------------------------------------------------
 # Abstract Base Class  (Abstraction + Encapsulation)
-# -------------------------------------------------------
 class Room(ABC):
     """
     Abstract class representing a hotel room.
@@ -27,17 +14,17 @@ class Room(ABC):
     def __init__(self, room_type, floor, capacity, price_per_night):
         Room._id_counter += 1
 
-        # Private attributes - Encapsulation
+        # Private attributes 
         self.__room_number     = Room._id_counter
         self.__price_per_night = price_per_night
 
-        # Protected attributes (accessible to child classes)
+        # Protected attributes
         self._room_type = room_type
         self._floor     = floor
         self._capacity  = capacity
         self._is_booked = False
 
-    # --- Getters (Encapsulation) ---
+
     def get_room_number(self):
         return self.__room_number
 
@@ -56,7 +43,7 @@ class Room(ABC):
     def is_booked(self):
         return self._is_booked
 
-    # --- Setters with validation (Encapsulation) ---
+    #  Setters with validation 
     def set_price_per_night(self, price):
         if price <= 0:
             raise ValueError("Price must be greater than zero.")
@@ -65,7 +52,7 @@ class Room(ABC):
     def set_booked(self, status):
         self._is_booked = status
 
-    # --- Abstract methods (must be overridden by child classes) ---
+    #  Abstract methods (must be overridden by child classes) 
     @abstractmethod
     def get_description(self):
         pass
@@ -80,9 +67,7 @@ class Room(ABC):
                 f"Floor {self._floor} | RM{self.__price_per_night:.2f}/night | {status}")
 
 
-# -------------------------------------------------------
 # StandardRoom  (Inheritance + Polymorphism)
-# -------------------------------------------------------
 class StandardRoom(Room):
     """
     Basic room. Inherits from Room.
@@ -106,9 +91,7 @@ class StandardRoom(Room):
         return self.get_price_per_night() * nights
 
 
-# -------------------------------------------------------
 # DeluxeRoom  (Inheritance + Polymorphism)
-# -------------------------------------------------------
 class DeluxeRoom(Room):
     """
     Upgraded room with a 10% weekend surcharge.
@@ -143,9 +126,7 @@ class DeluxeRoom(Room):
         return round(total, 2)
 
 
-# -------------------------------------------------------
 # SuiteRoom  (Inheritance + Polymorphism)
-# -------------------------------------------------------
 class SuiteRoom(Room):
     """
     Luxury suite with 15% discount for 5+ nights.
