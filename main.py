@@ -2,14 +2,6 @@ import sys
 import subprocess
 import time
 
-def ensure_dependencies():
-    """
-    Check if required libraries are installed.
-    Removed 'rich' from here since we use simple text now.
-    """
-    # No extra dependencies needed for simple text CLI
-    pass
-
 def try_gui():
     print("\n[System] Checking GUI requirements...")
     try:
